@@ -1,2 +1,2 @@
 # scraperWallpaper
-Scrap wallpaper on 4chan with keywords , written in Golang
+get wallpapers from 4chan /wg/ board with keywords , written in Golang
