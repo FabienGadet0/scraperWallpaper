@@ -12,6 +12,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"path/filepath"
 )
 
 type MyJsonName struct {
@@ -27,7 +28,7 @@ type MyJsonName struct {
 }
 
 var searchedWords = []string{"minimalistic", "Minimalistic", "depressing", "Depressing", "minimal", "Minimal", "Depressing", "Paint", "paint",
-	"Aesthetic", "aesthetic", "winter", "Winter"}
+	"Aesthetic", "aesthetic", "winter", "Winter", "Philosophical"}
 
 var board = "wg"
 var url = "https://boards.4chan.org/" + board
@@ -58,21 +59,22 @@ func request(url string) []byte {
 
 func saveFile(name string, url string, wg *sync.WaitGroup) bool {
 	response, err := http.Get("https://" + url)
+	ext := filepath.Ext(url)
 	if err != nil {
 		defer wg.Done()
 		fileNumber--
 		return false
 	}
 	os.Mkdir("./imgs/", 0777)
-	file, errr := os.Create("./imgs/" + name)
+	file, errr := os.Create("./imgs/" + name + ext)
 	if errr != nil {
-		defer wg.Done()
 		defer file.Close()
 		fileNumber--
+		defer wg.Done()
 		return false
 	}
-	_, errrr := io.Copy(file, response.Body)
-	file.Close()
+	defer response.Body.Close()
+	_, errrr := io.Copy(file, response.Body )
 	if errrr != nil {
 		defer wg.Done()
 		os.Remove(name)
@@ -119,12 +121,16 @@ func main() {
 	start := time.Now()
 	var wg sync.WaitGroup
 	fmt.Println("waiting for workers ....")
-	for i := 1; i < 5; i++ {
+	for i := 1; i < 10; i++ {
 		wg.Add(1)
 		worker("https://a.4cdn.org/"+board+"/"+strconv.Itoa(i)+".json", &wg, true)
 	}
 	wg.Wait()
+	if (total == 0) {
+		fmt.Println("no keywords match")
+	} else {
 	fmt.Println("Finished ...")
 	fmt.Println(time.Since(start))
 	fmt.Println(fileNumber, "file downloaded")
+	}
 }
