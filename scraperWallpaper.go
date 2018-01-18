@@ -75,13 +75,14 @@ func saveFile(name string, url string, wg *sync.WaitGroup) bool {
 		return false
 	}
 	defer response.Body.Close()
-	_, errrr := io.Copy(file, response.Body )
+	_, errrr := io.Copy(file, response.Body)
 	if errrr != nil {
 		defer wg.Done()
 		os.Remove(name)
 		fmt.Println(name , " deleted because it's incomplete")
 		return false
 	}
+	defer file.Close()
 	defer wg.Done()
 	return true
 }
@@ -121,7 +122,7 @@ func worker(url string, wg *sync.WaitGroup, hardcore bool) {
 func main() {
 	start := time.Now()
 	var wg sync.WaitGroup
-	fmt.Println("waiting for workers ....")
+	fmt.Println("Please wait.... (few minutes)")
 	for i := 1; i < 10; i++ {
 		wg.Add(1)
 		worker("https://a.4cdn.org/"+board+"/"+strconv.Itoa(i)+".json", &wg, true)
