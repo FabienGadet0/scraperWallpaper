@@ -140,12 +140,9 @@ func main() {
 		fmt.Println("current keywords are : " + strings.Join(searchedWords, " "))
 	} else {
 		color.Green("Finished ...")
-		color.Green("Total Time : ")
-		color.Green("%s", time.Since(start))
-		color.Green("%s file downloaded", fileNumber)
+		color.Green("Total Time : %s", time.Since(start))
+		fmt.Println(fileNumber, "file downloaded")
 		color.Green("all the downloaded files are in the imgs folder")
 		bufio.NewReader(os.Stdin).ReadBytes('\n')
 	}
 }
-
-// Fabien Gadet
