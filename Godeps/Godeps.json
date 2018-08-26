@@ -2,5 +2,18 @@
 	"ImportPath": "scraperWallpaper",
 	"GoVersion": "go1.9",
 	"GodepVersion": "v79",
-	"Deps": []
+	"Deps": [	"bufio",
+		"encoding/json",
+		"fatih/color",
+		"fmt",
+		"io",
+		"io/ioutil",
+		"net/http",
+		"os",
+		"path/filepath",
+		"regexp",
+		"strconv",
+		"strings",
+		"sync",
+		"time"]
 }
